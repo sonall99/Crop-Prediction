@@ -2,6 +2,12 @@
 
 This is a web-based application built with **Streamlit** that helps predict the **most suitable crop** to sow based on current environmental conditions such as **soil parameters** and **weather data** for the selected location.
 
+
+---
+## 🌐 Live Demo
+
+- Check out the live version of the app here:  
+- 👉 [**Crop Prediction App**](https://crop-prediction-system-09.streamlit.app/)
 ---
 
 ## 🚀 Features
