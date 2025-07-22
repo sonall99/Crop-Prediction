@@ -31,11 +31,11 @@ if method == "Manually Type The Coordinates ✏️":
 
 elif method == "Mark The Location On The Map 🗺️":
     with st.expander("Mark The Location On The Map 🗺️", expanded=True):
-        col1, col2 = st.columns([1, 2])
+        col1, col2 = st.columns([1.5, 1])
         with col2:
             map = folium.Map(location=[20.5937, 78.9629], zoom_start=5)
             map.add_child(folium.LatLngPopup())
-            map_data = st_folium(map, width=700, height=500)
+            map_data = st_folium(map, width=600, height=400)
 
         with col1:
             st.subheader("📌 Select The Coordinates")
