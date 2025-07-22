@@ -8,6 +8,6 @@ def P_prediction(N,Temp,RH,Ph,Rainfall):
     with open("P_Prediction/p_pred_scaler.pkl","rb") as f:
         scaler = pickle.load(f)
 
-#Made by Sonal Singh
+#Made by Sonal Singhh
     Y_pred = model.predict(scaler.transform([[N,Temp,RH,Ph,Rainfall]]))
     return Y_pred
