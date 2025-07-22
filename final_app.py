@@ -171,4 +171,4 @@ st.markdown("""
     </div>
 """, unsafe_allow_html=True)
 
-# Made by Sonal Singh
+# Made by SONAL SINGH
