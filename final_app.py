@@ -150,7 +150,7 @@ with st.form("Crop Predict"):
                 st.markdown("""
                     You may find all the files of the dataset used to train the model below :-
 
-                    - https://www.kaggle.com/datasets/kunshbhatia/crop-production-data-raw-refined
+                    - https://www.kaggle.com/datasets/atharvaingle/crop-recommendation-dataset
                     - Above dataset is with respect to Indian Crops and their relation with Climate and Weather.
                     """)
 
