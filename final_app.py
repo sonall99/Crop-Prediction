@@ -119,7 +119,6 @@ with st.form("Crop Predict"):
                 <div style="font-size: 42px; font-weight: bold; color: #2e7d32; margin-top: 15px;">{Pred_Crop}</div>
             </div>
             """, unsafe_allow_html=True)
-            # Made by Kunsh Bhatia
             st.markdown("""
                 <div style="background-color: rgba(255, 255, 255, 0.2); 
                     border: 1px solid #ccc; 
