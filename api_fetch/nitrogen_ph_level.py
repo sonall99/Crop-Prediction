@@ -64,4 +64,4 @@ def fetch_soil(lat, lon):
             "error": f"Error while fetching soil data: {str(e)}"
         }
 
-#Made by Sonal Singh
+#Made by Sonal

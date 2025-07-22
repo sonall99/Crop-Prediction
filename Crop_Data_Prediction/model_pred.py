@@ -6,7 +6,7 @@ def model_func(Temperature, RH, PH, Rain):
     scaler = pickle.load(open("scale.pkl", "rb"))
     list_ = pickle.load(open("model_dict.pkl", "rb"))
 
-    # Unpack the predicted class label from array
+
     Prediction = model.predict(scaler.transform([[Temperature, RH, PH, Rain]]))[0]
 
     # Safely map label to crop name

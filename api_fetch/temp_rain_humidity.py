@@ -6,7 +6,7 @@ from datetime import datetime, timedelta
 
 def get_weather_info(lat, lon):
     try:
-        # Coordinate range validation
+
         if not (-90 <= lat <= 90 and -180 <= lon <= 180):
             return {
                 "error": "Please enter coordinates within:\nLatitude: [-90, 90], Longitude: [-180, 180]"
