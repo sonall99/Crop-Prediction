@@ -2,9 +2,9 @@ import pickle
 
 def model_func(Temperature, RH, PH, Rain):
     import pickle
-    model = pickle.load(open("model.pkl", "rb"))
-    scaler = pickle.load(open("scale.pkl", "rb"))
-    list_ = pickle.load(open("model_dict.pkl", "rb"))
+    model = pickle.load(open("Crop_Data_Prediction/model.pkl", "rb"))
+    scaler = pickle.load(open("Crop_Data_Prediction/scale.pkl", "rb"))
+    list_ = pickle.load(open("Crop_Data_Prediction/model_dict.pkl", "rb"))
 
 
     Prediction = model.predict(scaler.transform([[Temperature, RH, PH, Rain]]))[0]
