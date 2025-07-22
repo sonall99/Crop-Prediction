@@ -11,6 +11,11 @@ def final_model(lat, lon):
 
     data = fetch_soil(lat, lon)
     data1 = get_weather_info(lat, lon)
+    # Handle error case from either API
+    if "error" in data:
+        raise Exception(f"❌ Soil API Error: {data['error']}")
+    if "error" in data1:
+        raise Exception(f"❌ Weather API Error: {data1['error']}")
 
     try:
         Temperature = list(data1.values())[0]

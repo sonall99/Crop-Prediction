@@ -156,14 +156,12 @@ with st.form("Crop Predict"):
 
         # Main Error Block
         except:
-            st.header("Some Error Occured , Please Try Again\nPossible Troubleshoot :-\n"
-                      '1) Make sure that the marked location is not a river body or anything except the land.\n'
-                      '2) Try clicking submit 3-4 times , sometimes server issue arises.\n'
-                      '3) Check the coordinates entered.\n'
-                      '4) The order with which coordinates are entered is correct i.e. latitude, then longitude.\n'
-                      '5) Try using another set of coordinates.')
+            import traceback
 
-# Footer
+            st.error("❌ An error occurred while processing your request.")
+            st.code(traceback.format_exc())
+
+        # Footer
 st.markdown("""
     <hr style="margin-top: 2rem; margin-bottom: 0;">
     <div style="text-align: center; color: grey; font-size: 14px; padding: 10px 0;">

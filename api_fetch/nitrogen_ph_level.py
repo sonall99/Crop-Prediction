@@ -3,40 +3,65 @@
 import requests
 
 def fetch_soil(lat, lon):
-    url = (f"https://rest.isric.org/soilgrids/v2.0/properties/query?lon={int(round(lon,0))}&lat={int(round(lat,0))}&property=nitrogen&property=phh2o&depth=0-5cm&value=Q0.5")
-    resp = requests.get(url).json()
-
     try:
+        # Valid coordinate range check
+        if not (-90 <= lat <= 90 and -180 <= lon <= 180):
+            return {
+                "error": "Please enter coordinates within:\nLatitude: [-90, 90], Longitude: [-180, 180]"
+            }
 
-        if 180 > lon > -180 and 90 > lat > -90:
-            try:
-                Nitrogen = list(resp['properties']['layers'][0]['depths'][0]['values'].values())[0]
-                Ph = list(resp['properties']['layers'][1]['depths'][0]['values'].values())[0]
+        # Round to 1 decimal for better nearby searches
+        url = (
+            f"https://rest.isric.org/soilgrids/v2.0/properties/query?"
+            f"lon={round(lon, 1)}&lat={round(lat, 1)}"
+            f"&property=nitrogen&property=phh2o&depth=0-5cm&value=Q0.5"
+        )
 
-                if (Ph == None) or (Nitrogen == None):
-                    # Trying to get info of any nearby point
-                    for i in [+0.1,-0.1,+0.2,-0.2,+0.3,-0.3,+0.4,-0.4,+0.5,-0.5,+0.6,-0.6]:
-                        url2 = (f"https://rest.isric.org/soilgrids/v2.0/properties/query?lon={int(round(lon+i,0))}&lat={int(round(lat+i,0))}&property=nitrogen&property=phh2o&depth=0-5cm&value=Q0.5")
-                        resp2 = requests.get(url2).json()
-                        Nitrogen = list(resp2['properties']['layers'][0]['depths'][0]['values'].values())[0]
-                        Ph = list(resp2['properties']['layers'][1]['depths'][0]['values'].values())[0]
-                        if (Ph != None) and (Nitrogen != None):
-                            return {
-                                "Nitrogen" : Nitrogen/10,
-                                "Ph" : Ph/10 # Ph was earlier multiplied by 10 (d_factor) while requesting the URL , thus making it back to normal value
-                            }
+        resp = requests.get(url)
+        resp_json = resp.json()
 
-                return {
-                        "Nitrogen" : Nitrogen/10,
-                        "Ph" : Ph/10 # Ph was earlier multiplied by 10 while requesting the URL , thus making it back to normal value
-                    }
-            except:
-                raise ('Value(s) Not Found\n\nPossible Troubleshoot :-\n'
-                        '1) Check the coordinates entered\n'
-                        '2) The order with which coordinates are entered is correct i.e. latitude, then longitude\n'
-                        '3) Land marked is not good for crop production, try another nearby point.')
+        layers = resp_json.get('properties', {}).get('layers', [])
+        if len(layers) < 2:
+            raise ValueError("Incomplete soil data returned.")
 
-    except:
-        raise "Please Enter the value such that:\nLatitude :- [-90,90] AND Longitude :- [-180,180]"
+        Nitrogen = list(layers[0]['depths'][0]['values'].values())[0]
+        Ph = list(layers[1]['depths'][0]['values'].values())[0]
+
+        # If any value is missing, try nearby points
+        if Nitrogen is None or Ph is None:
+            for i in [+0.1, -0.1, +0.2, -0.2, +0.3, -0.3, +0.4, -0.4, +0.5, -0.5, +0.6, -0.6]:
+                nearby_url = (
+                    f"https://rest.isric.org/soilgrids/v2.0/properties/query?"
+                    f"lon={round(lon + i, 1)}&lat={round(lat + i, 1)}"
+                    f"&property=nitrogen&property=phh2o&depth=0-5cm&value=Q0.5"
+                )
+                nearby_resp = requests.get(nearby_url)
+                nearby_json = nearby_resp.json()
+
+                try:
+                    N_temp = list(nearby_json['properties']['layers'][0]['depths'][0]['values'].values())[0]
+                    Ph_temp = list(nearby_json['properties']['layers'][1]['depths'][0]['values'].values())[0]
+                    if N_temp is not None and Ph_temp is not None:
+                        return {
+                            "Nitrogen": N_temp / 10,
+                            "Ph": Ph_temp / 10
+                        }
+                except:
+                    continue  # Try next nearby point
+
+            return {
+                "error": "Could not find valid soil data nearby. Try a different location."
+            }
+
+        # Return valid values
+        return {
+            "Nitrogen": Nitrogen / 10,
+            "Ph": Ph / 10
+        }
+
+    except Exception as e:
+        return {
+            "error": f"Error while fetching soil data: {str(e)}"
+        }
 
 #Made by Sonal Singh
